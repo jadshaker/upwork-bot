@@ -130,3 +130,9 @@ dmypy.json
 
 # firebase credentials file
 serviceAccountKey.json
+
+# Secrets
+SECRETS.py
+
+# logs
+logs.txt
