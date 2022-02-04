@@ -6,8 +6,10 @@ from firebase_admin import credentials, initialize_app, db
 from discord.ext.commands import Bot
 
 
-def print(values: str) -> None:
-    open('logs.txt', 'a').write(f'{datetime.now()} - {values}\n')
+def log(*values: str, start='') -> None:
+    open('logs.txt', 'a').write(
+        f"{start}{datetime.now()} - {' '.join(values)}\n"
+    )
 
 
 cred = credentials.Certificate('./serviceAccountKey.json')
@@ -28,12 +30,12 @@ async def fetch_data():
         _, job = fetched_jobs.popitem()
         message = await channel.fetch_message(MESSAGE_IDS[i])
         await message.edit(embed=to_message(job))
-        print('edited' + str(to_message(job)))
+        log('edited', str(to_message(job)))
 
 
 @bot.event
 async def on_ready():
-    print(f'\n{bot.user} started successfully!')
+    log(f'{bot.user} started successfully!\n', start='\n')
     fetch_data.start()
 
 
