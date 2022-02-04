@@ -82,8 +82,8 @@ def to_message(job: dict) -> Embed:
         if seconds < 60:
             return 'just now'
         elif seconds < 3600:
-            return f'{seconds // 60} minute {"s" if seconds >= 120 else ""}ago'
-        return f'{seconds // 3600} hour {"s" if seconds >= 7200 else ""}ago'
+            return f'{seconds // 60} minute{"s" if seconds >= 120 else ""} ago'
+        return f'{seconds // 3600} hour{"s" if seconds >= 7200 else ""} ago'
 
     message.title = re.sub('<[^<]+?>', '', f":fire: {job['title']}\n\n")
     message.url = job['url']
