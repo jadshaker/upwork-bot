@@ -27,7 +27,7 @@ async def fetch_data():
 
 @bot.event
 async def on_ready():
-    log(f'{bot.user} started successfully!\n', start='\n\n')
+    log(f'{bot.user} started successfully!\n')
     fetch_data.start()
 
 
