@@ -1,8 +1,7 @@
-from SECRETS import DATABASE_URL, TOKEN, MESSAGE_IDS
+from SECRETS import TOKEN, MESSAGE_IDS
 from datetime import datetime
 from functions import fetch_upwork_jobs, to_message
 from discord.ext import tasks
-from firebase_admin import credentials, initialize_app, db
 from discord.ext.commands import Bot
 
 
@@ -12,20 +11,13 @@ def log(*values: str, start='') -> None:
     )
 
 
-cred = credentials.Certificate('./serviceAccountKey.json')
-initialize_app(cred, {'databaseURL': DATABASE_URL})
-
 bot = Bot('!')
 
 
 @tasks.loop(minutes=1)
 async def fetch_data():
     channel = bot.get_channel(939143472055746590)
-    old_jobs: dict = db.reference('jobs').get()
-    if old_jobs == None:
-        old_jobs = []
     fetched_jobs = fetch_upwork_jobs(query='scrap', per_page=5)
-    db.reference('jobs').set(fetched_jobs)
     for i in range(5):
         _, job = fetched_jobs.popitem()
         message = await channel.fetch_message(MESSAGE_IDS[i])
@@ -35,7 +27,7 @@ async def fetch_data():
 
 @bot.event
 async def on_ready():
-    log(f'{bot.user} started successfully!\n', start='\n')
+    log(f'{bot.user} started successfully!\n', start='\n\n')
     fetch_data.start()
 
 
