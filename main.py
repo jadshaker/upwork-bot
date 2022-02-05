@@ -1,4 +1,4 @@
-from SECRETS import TOKEN, MESSAGE_IDS
+from SECRETS import TOKEN, IDS
 from datetime import datetime
 from functions import fetch_upwork_jobs, to_message
 from discord.ext import tasks
@@ -14,15 +14,31 @@ def log(*values: str) -> None:
 bot = Bot('!')
 
 
+async def send_messages(channel_id: int, query: str, message_ids: list, per_page: int = 5):
+    channel = bot.get_channel(channel_id)
+    fetched_jobs = fetch_upwork_jobs(query=query, per_page=per_page)
+    for i in range(per_page):
+        _, job = fetched_jobs.popitem()
+        try:
+            message = await channel.fetch_message(message_ids[i])
+            await message.edit(embed=to_message(job))
+            log('edited', str(to_message(job)))
+        except:
+            await channel.send(embed=to_message(job))
+            log('sent', str(to_message(job)))
+
+
 @tasks.loop(minutes=1)
 async def fetch_data():
-    channel = bot.get_channel(939143472055746590)
-    fetched_jobs = fetch_upwork_jobs(query='scrap', per_page=5)
-    for i in range(5):
-        _, job = fetched_jobs.popitem()
-        message = await channel.fetch_message(MESSAGE_IDS[i])
-        await message.edit(embed=to_message(job))
-        log('edited', str(to_message(job)))
+    await send_messages(
+        IDS['scrap']['channel_id'], 'scrap', IDS['scrap']['message_ids'], per_page=5
+    )
+    await send_messages(
+        IDS['python']['channel_id'], 'python', IDS['python']['message_ids'], per_page=5
+    )
+    await send_messages(
+        IDS['machine-learning']['channel_id'], 'machine-learning', IDS['machine-learning']['message_ids'], per_page=5
+    )
 
 
 @bot.event
