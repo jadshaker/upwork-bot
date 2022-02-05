@@ -8,7 +8,7 @@ from discord.ext.commands import Bot
 def log(*values: str) -> None:
     value = f"{datetime.now()} - {' '.join(values)}\n"
     open('logs.txt', 'a').write(value)
-    print(value)
+    print(value, end='')
 
 
 bot = Bot('!')
