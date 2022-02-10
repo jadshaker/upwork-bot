@@ -22,10 +22,10 @@ async def send_messages(channel_id: int, query: str, message_ids: list, per_page
         try:
             message = await channel.fetch_message(message_ids[i])
             await message.edit(embed=to_message(job))
-            log('edited', str(to_message(job)))
+            log('edited', job['title'])
         except:
             await channel.send(embed=to_message(job))
-            log('sent', str(to_message(job)))
+            log('sent', job['title'])
 
 
 @tasks.loop(minutes=1)
