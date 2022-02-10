@@ -93,8 +93,8 @@ def to_message(job: dict) -> Embed:
         inline=False
     )
     message.add_field(
-        name=f':alarm_clock:',
-        value=f'> Posted {created_on((datetime.utcnow() - datetime(year, month, day, hour, minute, second)).seconds)}',
+        name=f':alarm_clock: Posted',
+        value=f'> {created_on((datetime.utcnow() - datetime(year, month, day, hour, minute, second)).seconds)}',
     )
     message.add_field(
         name=':ninja: Skills',
