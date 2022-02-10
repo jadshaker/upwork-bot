@@ -21,7 +21,7 @@ async def send_messages(channel_id: int, query: str, message_ids: list, per_page
     for i in range(per_page):
         _, job = fetched_jobs.popitem()
         title = re.sub('<[^<]+?>', '', job['title']).strip()
-        title = title[25:] + '...' if len(title) > 25 else title
+        title = title[:25] + '...' if len(title) > 25 else title
         try:
             message = await channel.fetch_message(message_ids[i])
             await message.edit(embed=to_message(job))
