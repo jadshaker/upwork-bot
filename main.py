@@ -1,3 +1,4 @@
+import re
 from SECRETS import TOKEN, IDS
 from datetime import datetime
 from functions import fetch_upwork_jobs, to_message
@@ -19,13 +20,15 @@ async def send_messages(channel_id: int, query: str, message_ids: list, per_page
     fetched_jobs = fetch_upwork_jobs(query=query, per_page=per_page)
     for i in range(per_page):
         _, job = fetched_jobs.popitem()
+        title = re.sub('<[^<]+?>', '', job['title']).strip()
+        title = title[25:] + '...' if len(title) > 25 else title
         try:
             message = await channel.fetch_message(message_ids[i])
             await message.edit(embed=to_message(job))
-            log('edited', job['title'])
+            log('edited', title)
         except:
             await channel.send(embed=to_message(job))
-            log('sent', job['title'])
+            log('sent', title)
 
 
 @tasks.loop(minutes=1)
