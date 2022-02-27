@@ -36,15 +36,9 @@ async def send_messages(channel_id: int, query: str, message_ids: list, per_page
 
 @tasks.loop(minutes=1)
 async def fetch_data():
-    await send_messages(
-        IDS['scrap']['channel_id'], 'scrap', IDS['scrap']['message_ids'], per_page=5
-    )
-    await send_messages(
-        IDS['python']['channel_id'], 'python', IDS['python']['message_ids'], per_page=5
-    )
-    await send_messages(
-        IDS['machine-learning']['channel_id'], 'machine-learning', IDS['machine-learning']['message_ids'], per_page=5
-    )
+    await send_messages(IDS['scrap'], 'scrap', per_page=5)
+    await send_messages(IDS['python'], 'python', per_page=5)
+    await send_messages(IDS['machine-learning'], 'machine-learning', per_page=5)
 
 
 @bot.event
