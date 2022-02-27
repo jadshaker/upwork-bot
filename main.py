@@ -6,6 +6,9 @@ from discord.ext import tasks
 from discord.ext.commands import Bot
 
 
+open('logs.txt', 'w').close()
+
+
 def log(*values: str) -> None:
     value = f"{datetime.now()} - {' '.join(values)}\n"
     open('logs.txt', 'a').write(value)
