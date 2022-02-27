@@ -20,7 +20,7 @@ bot = Bot('!')
 messages = []
 
 
-async def send_messages(channel_id: int, query: str, per_page: int = 5):
+async def send_messages(query: str, channel_id: int, per_page: int = 5) -> None:
     channel = bot.get_channel(channel_id)
     fetched_jobs = fetch_upwork_jobs(query=query, per_page=per_page)
     for _ in range(per_page):
