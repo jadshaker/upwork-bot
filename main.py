@@ -6,6 +6,10 @@ from discord.ext import tasks
 from discord.channel import TextChannel
 from discord.ext.commands import Bot
 
+
+# TODO keep only 'per_page' int of messages in each channel
+
+
 TOKEN: str
 QUERIES: list[dict]
 bot: Bot = Bot('!')
