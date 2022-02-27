@@ -39,6 +39,7 @@ async def fetch_data():
     await send_messages(IDS['scrap'], 'scrap', per_page=5)
     await send_messages(IDS['python'], 'python', per_page=5)
     await send_messages(IDS['machine-learning'], 'machine-learning', per_page=5)
+    await send_messages(IDS['data'], 'data', per_page=5)
 
 
 @bot.event
