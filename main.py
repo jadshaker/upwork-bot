@@ -1,9 +1,12 @@
 import re
-from SECRETS import TOKEN, IDS
+from json import load
 from datetime import datetime
 from functions import fetch_upwork_jobs, to_message
 from discord.ext import tasks
 from discord.ext.commands import Bot
+
+
+TOKEN, QUERIES = load(open('config.json')).values()
 
 
 open('logs.txt', 'w').close()
@@ -36,10 +39,8 @@ async def send_messages(query: str, channel_id: int, per_page: int = 5) -> None:
 
 @tasks.loop(seconds=30)
 async def fetch_data():
-    await send_messages(IDS['scrap'], 'scrap', per_page=5)
-    await send_messages(IDS['python'], 'python', per_page=5)
-    await send_messages(IDS['machine-learning'], 'machine-learning', per_page=5)
-    await send_messages(IDS['data'], 'data', per_page=5)
+    for query in QUERIES:
+        await send_messages(*query.values())
 
 
 @bot.event
