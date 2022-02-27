@@ -17,24 +17,24 @@ def log(*values: str) -> None:
 
 bot = Bot('!')
 
+messages = []
 
-async def send_messages(channel_id: int, query: str, message_ids: list, per_page: int = 5):
+
+async def send_messages(channel_id: int, query: str, per_page: int = 5):
     channel = bot.get_channel(channel_id)
     fetched_jobs = fetch_upwork_jobs(query=query, per_page=per_page)
-    for i in range(per_page):
+    for _ in range(per_page):
         _, job = fetched_jobs.popitem()
         title = re.sub('<[^<]+?>', '', job['title']).strip()
         title = title[:25] + '...' if len(title) > 25 else title
-        try:
-            message = await channel.fetch_message(message_ids[i])
-            await message.edit(embed=to_message(job))
-            log('edited', title)
-        except:
-            await channel.send(embed=to_message(job))
-            log('sent', title)
+        if query + '-' + title in messages:
+            continue
+        messages.append(query + '-' + title)
+        await channel.send(embed=to_message(job))
+        log('sent', title)
 
 
-@tasks.loop(minutes=1)
+@tasks.loop(seconds=30)
 async def fetch_data():
     await send_messages(IDS['scrap'], 'scrap', per_page=5)
     await send_messages(IDS['python'], 'python', per_page=5)
